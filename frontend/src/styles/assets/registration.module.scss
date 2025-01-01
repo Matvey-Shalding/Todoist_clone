@@ -1,0 +1,20 @@
+.container {
+	@apply relative w-full h-[30px] bg-transparent flex flex-col-reverse items-start duration-300 transition-[margin];
+}
+
+.container:has(.input:focus, .input:not(:placeholder-shown)) {
+	@apply mt-6;
+}
+
+.label {
+	@apply absolute left-0 font-medium text-lg -top-0.5 text-white pointer-events-none duration-300;
+}
+
+.input {
+	@apply w-full bg-transparent border-b border-main border-solid text-white text-lg;
+}
+
+.input:focus ~ .label,
+.input:not(:placeholder-shown) ~ .label {
+	@apply -top-6 left-0 text-white/85 text-base;
+}

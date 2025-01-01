@@ -1,0 +1,17 @@
+.element {
+	@apply overflow-y-auto;
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+	&::-webkit-scrollbar-track {
+		border-radius:3px;
+		background-color: #999999 ;
+	}
+
+	/* Handle */
+	&::-webkit-scrollbar-thumb {
+		border-radius:3px;
+		background-color: #fff;
+	}
+}

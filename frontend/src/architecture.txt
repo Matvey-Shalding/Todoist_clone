@@ -1,0 +1,257 @@
+The app consists of 6 tabs: create task,search,incoming,today,upcoming,filters and labels
+Stack: React + React Router + css modules(scss) + local storage
+
+Create task tab: This tab creates a new task and send it to the Incoming tab
+
+Search tab: This tab is responsible for all the search of tasks(by title,description and so on)
+
+Incoming tab: This tab stores all the tasks 
+
+Today tab:  This tab is responsible for tasks,that have the term 'Today'
+
+Filters and labels: In this tab you are able to filter and sort the tasks
+
+!All the tabs except 'Incoming' are working ONLY with local storage
+
+
+import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import { Updater, useImmer } from 'use-immer';
+import '../../../../styles/lib/DayPicker.scss';
+import { BreadcrumbsState } from '../../../../types/BreadCrumbs.interface';
+import { FormattedDate, initialTime } from '../../../../types/InitialTime.interface';
+import { MenuState } from '../../../../types/MenuState.type';
+import { TaskInfo } from '../../../../types/TaskInfo.interface';
+import { initDateMenuVars } from '../../../../utils/initDatemenu';
+import { isTodayOrTomorrowOrNull } from '../../../../utils/isTodayOrTomorrow';
+import { isTomorrow } from '../../../../utils/isTomorrow';
+import { UiTooltip } from '../../../ui/Tooltip';
+import { TimeAndDurationSubMenu } from '../TimeAndDuration.menu';
+import { DateMenuPresets } from './DateMenuPresets';
+export const DateMenu = function ({
+	changeMenu,
+	hidden,
+	setDateValue,
+	setMenu,
+	defaultDateValue,
+}: {
+	changeMenu: Updater<BreadcrumbsState> | undefined;
+	hidden: boolean;
+	setDateValue?: Updater<TaskInfo>;
+	setMenu: React.Dispatch<React.SetStateAction<MenuState | undefined>>;
+	defaultDateValue?: string;
+}) {
+	const { now, tomorrow, week, weekends, formattedNextWeek } = initDateMenuVars();
+	const [defaultValue, setDefaultValue] = useState<string>(
+		defaultDateValue ? defaultDateValue : 'Today'
+	);
+	let parsedDefaultDate: Date | undefined = undefined;
+	if (defaultDateValue !== undefined) {
+		if (defaultDateValue === 'Today') {
+			parsedDefaultDate = new Date();
+		} else if (defaultDateValue === 'Tomorrow') {
+			parsedDefaultDate = new Date(new Date().setDate(new Date().getDate() + 1));
+		} else {
+			parsedDefaultDate = new Date(defaultDateValue);
+		}
+	}
+	const [selectedDay, setSelectedDay] = useState<Date | undefined>(now);
+	const [date, setDate] = useImmer<FormattedDate>(initialTime);
+	const [sub_open, setSub_Open] = useState<boolean>(false);
+	const [selected, setSelected] = useState<Date | undefined>(parsedDefaultDate);
+	const [duration, setDuration] = useState<string>('');
+	const [picked, setPicked] = useState<boolean>(false);
+	const [isError, setIsError] = useState<boolean>(false);
+	//Create value for breadcrumbs
+	useEffect(() => {
+		const StringifiedDate = String(selected);
+		const mainDate = StringifiedDate.split(' ').slice(0, 4).join(' ');
+		if (selected) {
+			let result: string = '';
+			const day = isTodayOrTomorrowOrNull(selected);
+			if (day) {
+				result += day;
+				if (date.time) {
+					result += ` at ${date.time}`;
+				}
+			} else {
+				result += mainDate;
+				if (date.time) {
+					result += ` ${date.time}`;
+				}
+			}
+			changeMenu?.(prev => {
+				prev.dateMenu = result;
+			});
+		}
+	}, [selected, date]);
+	return (
+		<div
+			// initial={{
+			// 	height: 0,
+			// 	padding: 0,
+			// }}
+			// animate={{
+			// 	height: hidden ? 0 : 'auto',
+			// 	paddingTop: hidden ? 0 : 12,
+			// 	paddingBottom: hidden ? 0 : 12,
+			// }}
+			className={`
+					w-[270px] pt-3 pb-3
+					rounded-classic shadow-small opacity-95 pointer-events-auto
+					transition-opacity z-[10000] bg-nav duration-500
+					}`}
+		>
+			<div
+				className=' flex-col gap-y-2.5 flex'
+				// initial={{ opacity: 0 }}
+				// animate={{
+				// 	opacity: hidden ? 0 : 1,
+				// 	transition: {
+				// 		opacity: {
+				// 			delay: 0.15,
+				// 			duration: 0.1,
+				// 		},
+				// 	},
+				// }}
+				// exit={{
+				// 	opacity: hidden ? 0 : 1,
+				// 	transition: {
+				// 		duration: 3,
+				// 	},
+				// }}
+			>
+				{selected ? (
+					date.duration && sub_open === false ? (
+						<div className='flex justify-between pt-3 pb-3 pr-09 pl-2 border-b border-main border-solid'>
+							{isTodayOrTomorrowOrNull(selected) ? (
+								<span>
+									{selected.getDate() - 1 === new Date().getDate() ||
+									(date.time && sub_open === false && isTomorrow(date.time, new Date()))
+										? 'Tomorrow'
+										: 'Today'}
+									{date.time && sub_open === false && ` at ${date.time}`}
+								</span>
+							) : (
+								<span style={{ wordSpacing: '2px' }}>
+									{selected.toDateString()} {date.time && sub_open === false && date.time}
+								</span>
+							)}
+							<div className='pr-2'>
+								<UiTooltip content={date.duration} />
+							</div>
+						</div>
+					) : (
+						<div className='pt-3 pb-3 pl-2 border-b border-main border-solid'>
+							{isTodayOrTomorrowOrNull(selected) ? (
+								<span>
+									{selected.getDate() - 1 === new Date().getDate() ||
+									(date.time && sub_open === false && isTomorrow(date.time, new Date()))
+										? 'Tomorrow'
+										: 'Today'}
+									{date.time && sub_open === false && ` at ${date.time}`}
+								</span>
+							) : (
+								<span style={{ wordSpacing: '2px' }}>
+									{selected.toDateString()} {date.time && sub_open === false && date.time}
+								</span>
+							)}
+						</div>
+					)
+				) : (
+					<span className='pt-3 pb-3 pl-2 border-b border-main border-solid'>
+						{defaultValue}
+					</span>
+				)}
+				<DateMenuPresets
+					tomorrow={tomorrow}
+					setDefaultValue={setDefaultValue}
+					setMenu={setMenu}
+					weekends={weekends}
+					formattedNextWeek={formattedNextWeek}
+					week={week}
+					setSelected={setSelected}
+				/>
+				<div className='relative right-3'>
+					{' '}
+					<DayPicker
+						showOutsideDays
+						weekStartsOn={1}
+						modifiersClassNames={{ selected: 'my-today', today: 'today' }}
+						mode='single'
+						fromDate={new Date()}
+						selected={selected}
+						onSelect={(day) => {
+							setSelected(day)
+							setMenu(undefined)
+						}}
+					/>
+				</div>
+				<div className='grid relative place-content-center border-t border-main border-solid pt-2'>
+					<TimeAndDurationSubMenu
+						hidden={!sub_open}
+						setDate={setDate}
+						setPicked={setPicked}
+						setSub_Open={setSub_Open}
+						date={date}
+						changeMenu={changeMenu}
+					/>
+					<button
+						disabled={defaultValue === 'Without term' && selected === undefined}
+						onClick={e => {
+							if (!picked) {
+								setSub_Open(true);
+							}
+						}}
+						className='border-main flex justify-center items-center gap-x-2 rounded-classic relative 
+					border border-solid w-[230px] pt-1.5 pb-1.5 pr-2'
+					>
+						{picked ? (
+							<div
+								style={{ flex: '0 0 100%' }}
+								className='flex justify-center items-center relative'
+							>
+								<div className='flex gap-x-2 items-center pr-2'>
+									<img
+										className='inline-block w-3 h-3 ml-2 mt-1 relative bottom-[1px] left-0.5'
+										src='/img/modals/clock.png'
+										alt='clock'
+									/>
+									<span>{date.time}</span>
+								</div>
+								<span
+									onClick={() => {
+										setPicked(false);
+										setDate(date => {
+											date.time = '';
+											date.duration = '';
+										});
+										if (changeMenu) {
+											changeMenu(prev => {
+												prev.duration = undefined;
+											});
+										}
+									}}
+									className='absolute right-0 block'
+								>
+									&#10006;
+								</span>
+							</div>
+						) : (
+							<div className='flex items-center gap-x-1'>
+								<img
+									className='inline-block w-4 h-4 relative top-0.5'
+									src='/img/modals/clock.svg'
+									alt='clock'
+								/>
+								<span>Time</span>
+							</div>
+						)}
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};

@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+[data-rbd-draggable-id] { will-change: transform, opacity !important; }
+
+html.disabled {
+	pointer-events: none !important;
+	overflow-x: hidden;
+	* {
+		overflow:hidden !important;
+	}
+}
+
+html,body {
+	overflow: hidden !important;
+	position: relative;
+	*::placeholder {
+		color: white;
+	}
+}
+
+input,textarea {
+	outline: none;
+}
+
+* {
+	margin: 0;
+	font-family: "Arimo", sans-serif;
+	@apply text-text;
+	user-select: none !important;
+}
+
+body {
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
