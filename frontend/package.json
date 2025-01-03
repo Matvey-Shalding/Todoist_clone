@@ -3,7 +3,7 @@
 	"name": "my-app",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://github.com/Matvey-Shalding/Todo-list",
+	"homepage": "https://github.com/Matvey-Shalding/Matvey-Shaldin.github.io",
 	"dependencies": {
 		"@types/aos": "^3.0.7",
 		"@types/react": "^18.2.42",
@@ -36,8 +36,7 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"serve": "vite preview",
-		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build --no-history -r https://github.com/Matvey-Shalding/Todo-list"
+		"preview": "npm run preview"
 	},
 	"eslintConfig": {
 		"extends": [
