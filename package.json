@@ -3,7 +3,7 @@
 	"name": "my-app",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://Matvey-Shaldin.github.io/Todoist/",
+	"homepage": "https://Matvey-Shaldin.github.io/To-do-list/",
 	"dependencies": {
 		"@types/aos": "^3.0.7",
 		"@types/react": "^18.2.42",
@@ -34,7 +34,7 @@
 	"scripts": {
 		"start": "vite",
 		"dev": "vite",
-		"build" : "vite build",
+		"build": "vite build",
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d dist"
 	},
