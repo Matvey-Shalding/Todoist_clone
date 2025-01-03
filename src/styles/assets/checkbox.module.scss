@@ -1,0 +1,35 @@
+.checkbox {
+	position: relative;
+}
+
+.fake {
+	@apply w-[19px] h-[19px] rounded-[6px] border border-solid border-main inline-block;
+	pointer-events: none;
+	position: absolute;
+	left: 2px;
+	top: 4px;
+	&::before {
+		content: '';
+		display: inline-block;
+		width: 13px;
+		height: 13px;
+		background-image: url('../../../public/img/main/yes.svg');
+		background-repeat: no-repeat;
+		background-size: contain;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) scale(0);
+		transition: transform 150ms linear;
+	}
+}
+
+.real {
+	left: 2px;
+	top: 1px;
+	opacity: 0;
+	@apply w-6 h-6 border border-solid border-main rounded-classic relative;
+	&:checked + .fake::before {
+		transform: translate(-50%, -50%) scale(1);
+	}
+}

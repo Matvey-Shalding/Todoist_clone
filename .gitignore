@@ -1,0 +1,15 @@
+# Build directories
+/dist/
+/build/
+/out/
+
+# Temporary files and cache
+*.cache
+*.tmp
+
+# Node modules
+node_modules/
+
+# Cache directories
+.npm/
+.cache/

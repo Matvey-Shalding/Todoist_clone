@@ -1,0 +1,9 @@
+export enum LOCAL_STORAGE {
+  USERNAME = 'USERNAME',
+  IS_SING_UP = 'IS_SINGED_UP',
+  NO_REGISTRATION = 'NO_REGISTRATION',
+  IS_LOGGED = 'Yes',
+  IS_NOT_LOGGED = 'No',
+  TASKS = 'tasks',
+  SECTIONS = 'sections',
+}

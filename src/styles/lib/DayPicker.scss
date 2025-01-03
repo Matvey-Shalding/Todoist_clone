@@ -1,0 +1,19 @@
+.my-today {
+	@apply z-10 text-white relative bg-blue;
+}
+
+.today {
+	position: relative;
+	&::after {
+	@apply absolute w-[5px] h-[5px] block rounded-[50%] bottom-0 bg-blue;
+	}
+}
+
+.rdp {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+	--rdp-cell-size: 38px !important;
+	--rdp-background-color: #3b3b3b !important;
+	--rdp-accent-color: #fff !important;
+	--rdp-accent-color-dark: #fff !important;
+}
