@@ -3,7 +3,7 @@
 	"name": "my-app",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://Matvey-Shaldin.github.io/To-do-list/",
+	"homepage": "https://github.com/Matvey-Shalding/Todoist_clone",
 	"dependencies": {
 		"@types/aos": "^3.0.7",
 		"@types/react": "^18.2.42",
